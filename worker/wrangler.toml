@@ -1,0 +1,8 @@
+name = "fling-pin-relay"
+main = "upload-proxy.js"
+compatibility_date = "2026-01-01"
+# Secrets: `wrangler secret put PINATA_JWT`   (free key from pinata.cloud)
+# Vars (optional):
+[vars]
+ALLOW_ORIGIN = "*"
+GATEWAY = "https://ipfs.io/ipfs/"

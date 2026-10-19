@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FLING — fling your memecoin</title>
+<meta name="description" content="FLING is a memecoin launchpad. Name it, pick a ticker, drop the art, fling it onto pump.fun from your own wallet in one signature. No custody, no sign-ups.">
+<meta property="og:title" content="FLING">
+<meta property="og:description" content="Fling your memecoin. One form, one signature, live on pump.fun.">
+<meta property="og:image" content="./logo.png">
+<link rel="icon" type="image/png" href="./favicon.png">
+<meta name="theme-color" content="#120f0d">
+<link rel="stylesheet" href="./fling.css">
+<script>try{var t=localStorage.getItem("fling-theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+</head>
+<body>
+<div class="fl-shell">
+  <header class="fl-header">
+    <a href="#top" class="fl-brand" aria-label="FLING home"><img src="./logo.png" alt="" width="30" height="30" class="fl-brand-logo" draggable="false"><span class="fl-brand-word">FLING</span></a>
+    <nav class="fl-nav" aria-label="Main">
+      <a href="#launch">Launch</a><a href="#live">Live</a><a href="#mine">Mine</a><a href="#how">How</a>
+    </nav>
+    <button id="themeBtn" class="fl-iconbtn" type="button" aria-label="Toggle theme"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" width="15" height="15"><circle cx="8" cy="8" r="3.2"/><path d="M8 1.2v1.8M8 13v1.8M1.2 8H3M13 8h1.8M3.2 3.2l1.3 1.3M11.5 11.5l1.3 1.3M12.8 3.2l-1.3 1.3M4.5 11.5l-1.3 1.3" stroke-linecap="round"/></svg></button>
+    <button id="walletBtn" class="fl-wallet" type="button">Connect wallet</button>
+  </header>
+
+  <main id="top">
+    <section class="fl-hero">
+      <div class="fl-hero-copy">
+        <p class="fl-kicker">Memecoin launchpad · Solana · pump.fun</p>
+        <h1 class="fl-h1">Fling it.</h1>
+        <p class="fl-sub">Name it, pick a ticker, drop the art, and fling your coin onto pump.fun from your own wallet in <b>one signature</b>. No custody, no accounts, no waiting. The curve opens the second the transaction lands.</p>
+        <div class="fl-hero-actions"><a href="#launch" class="fl-cta">Launch a coin</a><a href="#live" class="fl-ghost">Watch the live board</a></div>
+        <ul class="fl-facts" aria-label="Facts">
+          <li><b>0</b><span>creation fee on pump.fun</span></li>
+          <li><b>1</b><span>signature from your wallet</span></li>
+          <li><b id="liveCount">—</b><span>coins flung network-wide since you opened this page</span></li>
+        </ul>
+      </div>
+      <div class="fl-hero-art" aria-hidden="true">
+        <svg class="fl-arc" viewBox="0 0 420 320" fill="none"><path d="M24 300 C 120 40, 300 20, 404 24" stroke="currentColor" stroke-width="2" stroke-dasharray="3 9" stroke-linecap="round"/></svg>
+        <img src="./logo.png" alt="" width="300" height="300" class="fl-hero-mark" draggable="false">
+      </div>
+    </section>
+
+    <section id="launch" class="fl-section">
+      <div class="fl-sechead"><h2 class="fl-h2">Launch a coin</h2><p class="fl-subtle">Everything below is built into one pump.fun create transaction. You review it in your wallet before anything is sent.</p></div>
+      <div class="fl-launch">
+        <form id="launchForm" class="fl-form" autocomplete="off" novalidate>
+          <div class="fl-row2">
+            <label class="fl-field"><span class="fl-lab">Name <i id="nameCount">0/32</i></span><input id="fName" maxlength="32" placeholder="Rocket Frog" required></label>
+            <label class="fl-field"><span class="fl-lab">Ticker <i id="symCount">0/10</i></span><input id="fSymbol" maxlength="10" placeholder="FROG" class="fl-upper" required></label>
+          </div>
+          <label class="fl-field"><span class="fl-lab">Description <i id="descCount">0/500</i></span><textarea id="fDesc" maxlength="500" rows="3" placeholder="One line people will actually read."></textarea></label>
+          <div class="fl-field">
+            <span class="fl-lab">Art <i>square PNG, JPG or GIF · under 4 MB</i></span>
+            <label class="fl-drop" id="dropZone"><input id="fImage" type="file" accept="image/png,image/jpeg,image/gif,image/webp" hidden><span class="fl-drop-txt" id="dropTxt">Drop the image here or click to choose</span></label>
+          </div>
+          <details class="fl-more"><summary>Links and launch options</summary>
+            <div class="fl-row3">
+              <label class="fl-field"><span class="fl-lab">X / Twitter</span><input id="fTwitter" placeholder="https://x.com/…"></label>
+              <label class="fl-field"><span class="fl-lab">Telegram</span><input id="fTelegram" placeholder="https://t.me/…"></label>
+              <label class="fl-field"><span class="fl-lab">Website</span><input id="fWebsite" placeholder="https://…"></label>
+            </div>
+            <div class="fl-row3">
+              <label class="fl-field"><span class="fl-lab">Initial buy (SOL)</span><input id="fBuy" type="text" inputmode="decimal" value="0"></label>
+              <label class="fl-field"><span class="fl-lab">Slippage %</span><input id="fSlip" type="text" inputmode="decimal" value="10"></label>
+              <label class="fl-field"><span class="fl-lab">Priority fee (SOL)</span><input id="fPrio" type="text" inputmode="decimal" value="0.0005"></label>
+            </div>
+            <p class="fl-fine">The initial buy is optional. It is your first purchase on the curve and goes through PumpPortal, which charges 0.5% of that buy. Creating the coin itself is free on pump.fun; you pay only the network fee.</p>
+          </details>
+          <div class="fl-launchbar">
+            <button id="launchBtn" class="fl-cta fl-cta-big" type="submit" disabled>Fling it</button>
+            <div class="fl-status" id="status" aria-live="polite">Connect a wallet to launch.</div>
+          </div>
+          <ol class="fl-progress" id="progress" hidden>
+            <li data-step="1">Pin art and metadata</li><li data-step="2">Build the create transaction</li><li data-step="3">Sign in your wallet</li><li data-step="4">Confirm on-chain</li>
+          </ol>
+          <div class="fl-result" id="result" hidden></div>
+        </form>
+        <aside class="fl-preview" aria-label="Preview">
+          <p class="fl-lab">How it will look</p>
+          <div class="fl-card">
+            <div class="fl-card-art" id="pvArt"><img src="./logo.png" alt="" id="pvImg" draggable="false"></div>
+            <div class="fl-card-body">
+              <div class="fl-card-title"><b id="pvName">Your coin</b><span id="pvSym">$TICKER</span></div>
+              <p id="pvDesc" class="fl-card-desc">The description shows here. Keep it to one sharp line.</p>
+              <div class="fl-card-meta"><span>created by <b id="pvCreator">you</b></span><span id="pvBuy"></span></div>
+            </div>
+          </div>
+          <div class="fl-setup" id="setup">
+            <p class="fl-lab">Pinning</p>
+            <p class="fl-fine" id="setupTxt">Art and metadata are pinned to IPFS before the coin is created. This pad pins through its own relay when one is configured, or through your Pinata key stored only in this browser.</p>
+            <label class="fl-field"><span class="fl-lab">Pinata JWT (optional, stays in this browser)</span><input id="pinataJwt" type="password" placeholder="eyJ…"></label>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="live" class="fl-section">
+      <div class="fl-sechead"><h2 class="fl-h2">Live board</h2><p class="fl-subtle">Every coin being flung on pump.fun right now, straight from the chain feed. Newest first.</p></div>
+      <div class="fl-live" id="liveBoard"><div class="fl-live-empty" id="liveEmpty">Connecting to the feed…</div></div>
+    </section>
+
+    <section id="mine" class="fl-section">
+      <div class="fl-sechead"><h2 class="fl-h2">Your launches</h2><p class="fl-subtle">Remembered in this browser only. Nothing about you is stored anywhere else.</p></div>
+      <div class="fl-mine" id="mineList"><div class="fl-live-empty">Nothing flung from here yet.</div></div>
+    </section>
+
+    <section id="how" class="fl-section">
+      <div class="fl-sechead"><h2 class="fl-h2">How it works</h2></div>
+      <ol class="fl-steps">
+        <li><span class="fl-step-n">01</span><b>Fill the form</b><p>Name, ticker, description, art. Links are optional. The preview on the right is exactly what the coin page will show.</p></li>
+        <li><span class="fl-step-n">02</span><b>Art gets pinned</b><p>Your image and a metadata file are pinned to IPFS. The coin points at that file forever, so nothing here can change it later.</p></li>
+        <li><span class="fl-step-n">03</span><b>One signature</b><p>A pump.fun create transaction is built with a fresh mint keypair generated in your browser. Your wallet shows it; you approve it; it is sent.</p></li>
+        <li><span class="fl-step-n">04</span><b>It is live</b><p>The bonding curve opens immediately. You get the mint address, the pump.fun page and the explorer link. Trade it, share it, or fling the next one.</p></li>
+      </ol>
+      <p class="fl-fine fl-disclaimer">FLING never holds your keys or your funds. Transactions are built by the public PumpPortal API and signed by you. Memecoins are volatile; launch and trade at your own risk. Nothing here is financial advice.</p>
+    </section>
+  </main>
+
+  <footer class="fl-footer">
+    <div class="fl-foot-brand"><img src="./logo.png" alt="" width="22" height="22" draggable="false"><span>FLING</span></div>
+    <p class="fl-fine">Fling your memecoin. Built on pump.fun and Solana.</p>
+  </footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.98.0/lib/index.iife.min.js"></script>
+<script src="./app.js" defer></script>
+</body>
+</html>
