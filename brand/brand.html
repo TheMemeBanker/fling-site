@@ -7,10 +7,10 @@
 <style>
 :root{--accent:#FF4A1C;--ink:#111111;--paper:#FFFFFF;--night:#120F0D;--muted:#6f6964;--line:#e8e3dc}
 *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.55 ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace}
-.wrap{max-width:960px;margin:0 auto;padding:40px 22px 80px}
+.wrap{width:100%;max-width:none;margin:0;padding:clamp(18px,3vw,44px) clamp(16px,4vw,64px) 80px}
 h1{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:0 0 40px}
 h2{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin:64px 0 18px;padding-top:18px;border-top:1px solid var(--line)}
-p{max-width:64ch;margin:0 0 10px}.muted{color:var(--muted)}
+p{max-width:78ch;margin:0 0 10px}.muted{color:var(--muted)}
 .hero{display:grid;place-items:center;padding:60px 20px;border:1px solid var(--line);border-radius:18px}.hero svg{width:min(520px,80vw);height:auto}
 .row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
 .tile{display:grid;place-items:center;aspect-ratio:1;border-radius:14px;border:1px solid var(--line)}.tile svg{width:46%;height:auto}
