@@ -12,6 +12,16 @@ const CONFIG = {
   pool: "pump",
 };
 const $ = (id) => document.getElementById(id);
+/* $FlingIt token — set ONLY after the mint is verified on-chain. null = placeholder state. */
+const FLING_MINT = null;
+function wireFlingToken() {
+  const pill = $("flingTokenLink"), buy = $("flingBuy"), mintEl = $("flingMint"), note = $("flingTokenNote");
+  if (!FLING_MINT) return;
+  const pf = "https://pump.fun/coin/" + FLING_MINT;
+  [pill, buy].forEach(el => { if (!el) return; el.href = pf; el.removeAttribute("aria-disabled"); el.removeAttribute("title"); el.target = "_blank"; el.rel = "noopener"; });
+  if (mintEl) mintEl.innerHTML = '<a href="https://solscan.io/token/' + FLING_MINT + '" target="_blank" rel="noopener">' + FLING_MINT + '</a>';
+  if (note) note.textContent = "The official $FlingIt contract. Verify the address matches before you trade; anything else is an impostor.";
+}
 const W3 = window.solanaWeb3;
 const DRY = new URLSearchParams(location.search).get("dry") === "1";   // dry run: stop before broadcasting
 let wallet = null, pubkey = null, imageFile = null, launching = false;
@@ -326,4 +336,4 @@ async function resolveArtNow(img) {
 setInterval(() => { liveRows.forEach(x => { const t = x.row.querySelector(".fl-row-t"); if (t) t.textContent = ago(x.at); }); }, 15000);
 
 $("liveFilter").addEventListener("change", () => { const on = $("liveFilter").checked; liveRows.forEach(x => x.row.classList.toggle("hid", on && (+x.row.dataset.buy) < 0.5)); });
-preview(); validate(); renderMine(); liveConnect(); showBalance();
+preview(); validate(); renderMine(); liveConnect(); showBalance(); wireFlingToken();

@@ -174,3 +174,16 @@ a { color:inherit; }
   .fl-row { min-height:56px; }
   .fl-shell { padding-bottom:calc(40px + env(safe-area-inset-bottom,0px)); overflow-x:clip; }
 }
+
+/* $FlingIt token */
+.fl-pill { border:1.5px solid var(--accent); color:var(--accent); border-radius:999px; font-size:12px; font-weight:800; padding:6px 12px; text-decoration:none; white-space:nowrap; }
+.fl-pill[aria-disabled="true"] { opacity:.55; }
+.fl-token-head { display:flex; align-items:flex-start; gap:14px; }
+.fl-token-head img { flex-shrink:0; margin-top:2px; }
+.fl-token-sub { margin:4px 0 0; color:var(--muted); font-size:12.5px; max-width:70ch; }
+.fl-token-row { display:flex; align-items:center; gap:18px; flex-wrap:wrap; margin-top:16px; }
+.fl-cta[aria-disabled="true"] { opacity:.4; pointer-events:none; }
+.fl-token-mint { min-width:0; }
+.fl-token-mint code { font-size:12px; background:var(--well); padding:6px 10px; border-radius:8px; overflow-wrap:anywhere; }
+.fl-token-mint code a { color:var(--ink); text-decoration:none; border-bottom:1px dotted var(--muted); }
+@media (max-width: 520px) { .fl-pill { font-size:11px; padding:5px 9px; } .fl-token-row .fl-cta { width:100%; text-align:center; } }
