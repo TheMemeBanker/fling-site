@@ -117,7 +117,7 @@ drop.addEventListener("drop", e => takeFile(e.dataTransfer.files[0]));
 $("pvImg").classList.add("pixel");
 try { const j = localStorage.getItem("fling-pinata"); if (j) $("pinataJwt").value = j; } catch (e) {}
 $("pinataJwt").addEventListener("change", () => { try { localStorage.setItem("fling-pinata", $("pinataJwt").value.trim()); } catch (e) {} });
-if (CONFIG.uploadProxy) { $("setupTxt").textContent = "Art and metadata are pinned to IPFS through this pad's relay before the coin is created. No key needed."; $("pinataJwt").closest("label").hidden = true; }
+if (CONFIG.uploadProxy) { $("setup").hidden = true; }
 
 /* ---------- status / progress ---------- */
 function setStatus(t, cls) { const s = $("status"); s.textContent = t; s.className = "fl-status" + (cls ? " " + cls : ""); }
@@ -183,7 +183,7 @@ $("launchForm").addEventListener("submit", async (e) => {
     if (CONFIG.uploadProxy) uri = await pinViaProxy(meta, imageFile);
     else if (jwt) uri = await pinViaPinata(meta, imageFile, jwt);
     else if (DRY) uri = "https://example.invalid/dry-run.json";
-    else throw new Error("No pinning route. Add a Pinata JWT in the panel on the right (free at pinata.cloud) or configure the relay.");
+    else throw new Error("No pinning route. Open Options and paste a free Pinata key (pinata.cloud).");
     step(2);
     let mint = null;
     if ($("fVanity").checked && !DRY) {
@@ -232,8 +232,9 @@ function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<"
 function mineLoad() { try { return JSON.parse(localStorage.getItem("fling-mine") || "[]"); } catch (e) { return []; } }
 function remember(x) { const l = mineLoad(); l.unshift(x); try { localStorage.setItem("fling-mine", JSON.stringify(l.slice(0, 50))); } catch (e) {} renderMine(); }
 function renderMine() {
-  const l = mineLoad(); const el = $("mineList");
-  if (!l.length) { el.innerHTML = '<div class="fl-live-empty">Nothing flung from here yet.</div>'; return; }
+  const l = mineLoad(); const el = $("mineList"); const sec = document.getElementById("mine");
+  if (!l.length) { sec.hidden = true; el.innerHTML = ""; return; }
+  sec.hidden = false;
   el.innerHTML = l.map(x => `<a class="fl-row" href="https://pump.fun/coin/${x.mint}" target="_blank" rel="noopener"><span class="fl-row-art"><img src="./logo.png" alt="" style="image-rendering:pixelated;width:60%;height:60%;object-fit:contain"></span><span class="fl-row-name"><b>${esc(x.name)}</b><span>$${esc(x.symbol)}</span></span><span class="fl-row-k hide-m">mint<b>${x.mint.slice(0,4)}…${x.mint.slice(-4)}</b></span><span class="fl-row-k">status<b>${x.sig ? "live" : "dry run"}</b></span><span class="fl-row-t">${ago(x.at)}</span></a>`).join("");
 }
 function ago(t) { const s = Math.max(1, Math.round((Date.now() - t) / 1000)); return s < 60 ? s + "s ago" : s < 3600 ? Math.round(s / 60) + "m ago" : s < 86400 ? Math.round(s / 3600) + "h ago" : Math.round(s / 86400) + "d ago"; }
