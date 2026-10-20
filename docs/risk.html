@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Risk disclosure — FLING</title><meta name="description" content="Plain-language risks of launching and trading memecoins on Solana through pump.fun: total loss, volatility, irreversibility, slippage, graduation mechanics, scams, dependencies and law.">
+<link rel="icon" type="image/svg+xml" href="../brand/fling-mark-orange.svg"><link rel="canonical" href="https://flingit.fun/docs/risk.html">
+<meta property="og:title" content="Risk disclosure — FLING"><meta property="og:description" content="Plain-language risks of launching and trading memecoins on Solana through pump.fun: total loss, volatility, irreversibility, slippage, graduation mechanics, scams, dependencies and law."><meta property="og:image" content="https://flingit.fun/brand/fling-og-1200x630.png">
+<style>
+:root{--bg:#f6f1e7;--bg2:#fbf8f1;--ink:#1b1613;--muted:#6d625a;--line:#e3d9c8;--well:#efe8da;--accent:#FF4A1C;color-scheme:light}
+[data-theme="dark"]{--bg:#120f0d;--bg2:#1a1512;--ink:#f3ebdd;--muted:#9d9185;--line:#2b241f;--well:#1f1915;--accent:#FF5A2E;color-scheme:dark}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.6 ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace}
+a{color:inherit}
+.shell{max-width:1040px;margin:0 auto;padding:0 22px 70px}
+header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 0 26px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}.brand svg.m{width:26px;height:26px;color:var(--accent)}.brand svg.w{height:13px;width:auto;color:var(--ink)}
+.hr{display:flex;gap:8px;align-items:center}.btn{border:1.5px solid var(--ink);border-radius:999px;background:transparent;color:var(--ink);font:inherit;font-weight:700;font-size:12px;padding:7px 14px;text-decoration:none}
+.ib{display:grid;place-items:center;height:30px;width:30px;border:0;border-radius:8px;background:transparent;color:var(--muted);cursor:pointer}
+.layout{display:grid;grid-template-columns:200px minmax(0,1fr);gap:40px;align-items:start}
+nav.side{position:sticky;top:16px;display:grid;gap:4px;font-size:12.5px}nav.side a{text-decoration:none;color:var(--muted);padding:6px 10px;border-radius:8px}nav.side a.on{color:var(--ink);background:var(--bg2)}nav.side a:hover{color:var(--ink)}
+nav.side .k{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);padding:12px 10px 4px}
+main{min-width:0}
+h1{font-size:30px;line-height:1.15;letter-spacing:-.02em;margin:0 0 6px;text-wrap:balance}
+.upd{font-size:11px;color:var(--muted);margin:0 0 28px}
+h2{font-size:17px;margin:40px 0 10px;letter-spacing:-.01em}h3{font-size:14px;margin:24px 0 6px}
+p,li{max-width:70ch}p{margin:0 0 12px}ul,ol{padding-left:22px;margin:0 0 12px}li{margin:0 0 6px}
+.lead{font-size:15px;color:var(--muted);max-width:66ch}
+table{border-collapse:collapse;width:100%;font-size:12.5px;margin:10px 0 18px}th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}th{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}td.n{font-variant-numeric:tabular-nums;white-space:nowrap}
+.tw{overflow-x:auto}
+code,kbd{font-size:12px;background:var(--well);padding:2px 6px;border-radius:6px}
+pre{background:var(--well);padding:14px 16px;border-radius:12px;overflow-x:auto;font-size:12px;line-height:1.5}
+.note{border-left:3px solid var(--accent);padding:10px 14px;background:var(--bg2);border-radius:0 12px 12px 0;margin:14px 0;max-width:70ch}
+.toc{display:grid;gap:4px;margin:0 0 20px;padding:0;list-style:none;font-size:12.5px}.toc a{color:var(--muted);text-decoration:none}.toc a:hover{color:var(--ink)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:18px 0}.card{display:block;text-decoration:none;background:var(--bg2);border-radius:16px;padding:18px}.card b{display:block;font-size:14px;margin-bottom:6px}.card span{font-size:12px;color:var(--muted)}
+details{border-top:1px solid var(--line);padding:12px 0}details summary{cursor:pointer;font-weight:700;list-style:none}details summary::before{content:"+ ";color:var(--accent)}details[open] summary::before{content:"– "}details p{margin-top:10px}
+footer{margin-top:60px;border-top:1px dashed var(--line);padding-top:18px;font-size:11px;color:var(--muted);display:flex;flex-wrap:wrap;gap:14px}footer a{color:var(--muted)}
+@media (max-width:760px){.layout{grid-template-columns:1fr}nav.side{position:static;display:flex;flex-wrap:wrap;gap:4px}nav.side .k{display:none}}
+</style><script>try{var t=localStorage.getItem("fling-theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script></head>
+<body><div class="shell">
+<header><a class="brand" href="../" aria-label="FLING home"><svg class="m" xmlns="http://www.w3.org/2000/svg" viewBox="1.26 4.29 90.15 90.15" aria-hidden="true"><path d="M7.75 80.00 L7.62 78.91 L7.55 77.81 L7.50 76.71 L7.48 75.61 L7.49 74.51 L7.53 73.40 L7.59 72.30 L7.68 71.19 L7.79 70.09 L7.92 68.98 L8.08 67.88 L8.27 66.78 L8.48 65.68 L8.71 64.59 L8.97 63.50 L9.25 62.41 L9.55 61.33 L9.88 60.26 L10.23 59.19 L10.61 58.12 L11.01 57.07 L11.43 56.02 L11.88 54.98 L12.34 53.95 L12.83 52.92 L13.35 51.91 L13.88 50.90 L14.44 49.91 L15.02 48.92 L15.62 47.95 L16.24 46.99 L16.88 46.04 L17.54 45.11 L18.23 44.18 L18.93 43.27 L19.66 42.38 L20.40 41.50 L21.16 40.63 L21.95 39.78 L22.75 38.95 L23.57 38.13 L24.40 37.33 L25.26 36.54 L26.13 35.77 L27.02 35.02 L27.93 34.29 L28.85 33.58 L29.79 32.88 L30.74 32.21 L31.71 31.55 L32.70 30.92 L33.70 30.30 L34.71 29.70 L35.74 29.13 L36.78 28.58 L37.83 28.04 L38.89 27.53 L39.97 27.04 L41.05 26.58 L42.15 26.13 L43.26 25.71 L44.38 25.31 L45.50 24.94 L46.64 24.59 L47.78 24.26 L48.94 23.96 L50.10 23.68 L51.26 23.42 L52.44 23.19 L53.62 22.98 L54.80 22.80 L55.99 22.64 L57.04 37.60 L56.15 37.61 L55.26 37.64 L54.37 37.69 L53.48 37.75 L52.59 37.84 L51.70 37.94 L50.81 38.06 L49.92 38.20 L49.04 38.36 L48.15 38.53 L47.27 38.73 L46.39 38.94 L45.52 39.17 L44.65 39.43 L43.78 39.69 L42.92 39.98 L42.06 40.29 L41.21 40.61 L40.37 40.95 L39.53 41.31 L38.69 41.69 L37.87 42.09 L37.05 42.50 L36.23 42.93 L35.43 43.38 L34.63 43.85 L33.85 44.33 L33.07 44.83 L32.30 45.35 L31.54 45.88 L30.79 46.43 L30.05 47.00 L29.32 47.58 L28.61 48.18 L27.90 48.79 L27.21 49.42 L26.53 50.07 L25.86 50.72 L25.20 51.40 L24.56 52.09 L23.93 52.79 L23.31 53.51 L22.71 54.24 L22.12 54.98 L21.55 55.74 L20.99 56.51 L20.44 57.29 L19.91 58.08 L19.40 58.89 L18.90 59.71 L18.42 60.54 L17.96 61.38 L17.51 62.23 L17.08 63.09 L16.66 63.96 L16.26 64.85 L15.88 65.74 L15.52 66.64 L15.17 67.55 L14.85 68.46 L14.54 69.39 L14.24 70.32 L13.97 71.26 L13.71 72.21 L13.47 73.16 L13.25 74.12 L13.05 75.09 L12.86 76.06 L12.70 77.04 L12.54 78.02 L12.40 79.01 L12.25 80.00 Z" fill="currentColor"/><circle cx="73.20" cy="30.74" r="12" fill="currentColor"/></svg><svg class="w" xmlns="http://www.w3.org/2000/svg" viewBox="0 -938 3243 978" aria-hidden="true"><g fill="currentColor"><path d="M74 -688H630V-523H295V-405H583V-247H295V0H74Z M723 -688H944V-176H1297V0H723Z M1365 0V-528H1564V0Z M2179 0 1890 -334V0H1687V-688H1880L2169 -349V-688H2372V0Z M3198 -439H2987Q2987 -482 2949.0 -508.5Q2911 -535 2857 -535Q2779 -535 2739.0 -493.5Q2699 -452 2699 -376V-312Q2699 -236 2739.0 -194.5Q2779 -153 2857 -153Q2911 -153 2949.0 -178.5Q2987 -204 2987 -244H2831V-384H3198V0H3084L3062 -68Q2968 12 2816 12Q2645 12 2559.0 -77.5Q2473 -167 2473 -344Q2473 -519 2570.5 -609.5Q2668 -700 2848 -700Q2947 -700 3026.0 -670.0Q3105 -640 3151.5 -581.5Q3198 -523 3198 -439Z"/><circle cx="1582" cy="-816" r="78"/></g></svg></a><div class="hr"><button class="ib" id="themeBtn" type="button" aria-label="Toggle theme"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" width="15" height="15"><circle cx="8" cy="8" r="3.2"/><path d="M8 1.2v1.8M8 13v1.8M1.2 8H3M13 8h1.8M3.2 3.2l1.3 1.3M11.5 11.5l1.3 1.3M12.8 3.2l-1.3 1.3M4.5 11.5l-1.3 1.3" stroke-linecap="round"/></svg></button><script>document.getElementById("themeBtn").addEventListener("click",function(){var c=document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark";document.documentElement.setAttribute("data-theme",c);try{localStorage.setItem("fling-theme",c)}catch(e){}});</script><a class="btn" href="../#launch">Launch a coin</a></div></header>
+<div class="layout"><nav class="side" aria-label="Docs"><span class="k">Docs</span><a href="index.html">Overview</a><a href="whitepaper.html">Whitepaper</a><a href="how-it-works.html">How it works</a><a href="fees.html">Fees</a><a href="security.html">Security</a><a href="faq.html">FAQ</a><a href="terms.html">Terms of use</a><a href="privacy.html">Privacy</a><a href="risk.html" class="on">Risk disclosure</a><a href="../brand/brand.html">Brand</a></nav>
+<main><h1>Risk disclosure</h1><p class="upd">Last updated October 20, 2026</p>
+
+<p class="lead">Read this once before you launch or trade. It is written to be understood, not to be skimmed.</p>
+<h2>You can lose everything you put in</h2>
+<p>Memecoins have no cash flows, no backing and no intrinsic value. Prices are set by what other people are willing to pay from moment to moment. Most memecoins go to zero. An initial buy you make at launch can be worth nothing within minutes.</p>
+<h2>Transactions are irreversible</h2>
+<p>Once a transaction is confirmed on Solana it cannot be undone by you, by FLING, or by anyone. A typo in a ticker, a wrong image, a buy you regret: all permanent. Check the preview before you sign.</p>
+<h2>The bonding curve moves fast</h2>
+<p>Price on a pump.fun curve rises with every buy and falls with every sell, with no market maker and no circuit breaker. Early buyers can sell into later buyers at any time. Slippage settings protect the amount you pay, not the price you get later.</p>
+<h2>Graduation is not guaranteed</h2>
+<p>A coin only migrates to PumpSwap if enough SOL is raised on the curve. Most coins never graduate. Tokens on an uncompleted curve can still be sold back to the curve, at whatever the curve price is then, which may be far below what you paid.</p>
+<h2>You are the creator, publicly</h2>
+<p>The wallet that signs the create transaction is recorded on-chain as the coin's creator forever. Anyone can see it. Launching a coin that misleads people can carry legal consequences for you.</p>
+<h2>Scams around launches</h2>
+<p>Impostor sites, fake support accounts, "verification" requests, airdrop links and anyone asking for a seed phrase are scams. FLING never asks for a seed phrase or private key and never contacts you first.</p>
+<h2>Dependencies can fail</h2>
+<p>FLING relies on pump.fun, PumpSwap, PumpPortal, Irys, Arweave, public RPC endpoints and your wallet. Any of them can be slow, change terms, change fees, or go down. A launch can fail halfway (for example after storage but before the transaction) and need to be retried.</p>
+<h2>Software has bugs</h2>
+<p>FLING is software. It is tested, public and reviewed, and it can still be wrong. Use amounts you can afford to lose while a launch is fresh.</p>
+<h2>Law and tax</h2>
+<p>Creating and trading digital assets may be regulated, restricted or taxed where you live. Rules change. You are responsible for knowing and following them; FLING cannot advise you.</p>
+<h2>Nothing here is advice</h2>
+<p>Nothing on this site is investment, financial, legal or tax advice, and nothing is a recommendation to launch or buy any coin, including the coins shown on the live board.</p>
+
+<footer><span>FLING™ and the flick mark are trademarks of the FLING team.</span><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="risk.html">Risk</a><a href="https://github.com/TheMemeBanker/fling-site" target="_blank" rel="noopener">Source</a></footer>
+</main></div></div></body></html>
