@@ -17,6 +17,7 @@ a { color:inherit; }
 .fl-foot-row { display:flex; align-items:center; gap:4px 10px; margin-bottom:10px; flex-wrap:wrap; }
 .fl-brand-word { font-weight:800; letter-spacing:.14em; font-size:13px; }
 .fl-header-right { display:flex; align-items:center; gap:8px; }
+.fl-x { text-decoration:none; }
 .fl-docs { font-size:12.5px; margin-right:4px; }
 .fl-iconbtn { display:grid; place-items:center; height:30px; width:30px; border:0; border-radius:8px; background:transparent; color:var(--muted); cursor:pointer; }
 .fl-iconbtn:hover { color:var(--ink); background:var(--well); }

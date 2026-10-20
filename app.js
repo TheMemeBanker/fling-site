@@ -271,7 +271,7 @@ function showResult(mint, sig, meta) {
     (sig ? ` · <a href="https://solscan.io/tx/${sig}" target="_blank" rel="noopener">Transaction</a>` : " · dry run, nothing sent");
 }
 function shareFor(mint, meta) {
-  const txt = `$${meta.symbol} is live. ${meta.name} — flung onto pump.fun.\nhttps://pump.fun/coin/${mint}`;
+  const txt = `$${meta.symbol} is live. ${meta.name} — flung onto pump.fun via @FlingItFun.\nhttps://pump.fun/coin/${mint}`;
   $("share").hidden = false; $("shareTxt").value = txt; $("shareX").href = "https://x.com/intent/post?text=" + encodeURIComponent(txt);
 }
 $("copyShare").addEventListener("click", async () => { try { await navigator.clipboard.writeText($("shareTxt").value); $("copyShare").textContent = "Copied"; setTimeout(() => $("copyShare").textContent = "Copy post", 1500); } catch (e) { $("shareTxt").select(); } });
