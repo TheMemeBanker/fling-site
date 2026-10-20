@@ -13,7 +13,7 @@ const CONFIG = {
 };
 const $ = (id) => document.getElementById(id);
 /* $FlingIt token — set ONLY after the mint is verified on-chain. null = placeholder state. */
-const FLING_MINT = null;
+const FLING_MINT = "Fy9wvBrXNu9XkVBSADyka7APTDSnqXYQc9aJkMkmpump";
 function wireFlingToken() {
   const pill = $("flingTokenLink"), buy = $("flingBuy"), mintEl = $("flingMint"), note = $("flingTokenNote");
   if (!FLING_MINT) return;
