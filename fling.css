@@ -2,6 +2,7 @@
 :root { --bg:#f6f1e7; --bg2:#fbf8f1; --ink:#1b1613; --muted:#6d625a; --line:#e3d9c8; --well:#efe8da; --red:#d43a2c; --red-hi:#ea5546; --gold:#c8961e; --gold-hi:#e8b43a; --green:#1f9a5d; --shadow:0 1px 2px rgba(30,18,10,.06),0 18px 40px -22px rgba(30,18,10,.35); color-scheme:light; }
 [data-theme="dark"] { --bg:#120f0d; --bg2:#1a1512; --ink:#f3ebdd; --muted:#a3978a; --line:#2b241f; --well:#1f1915; --red:#e24234; --red-hi:#ff6a5c; --gold:#f6c442; --gold-hi:#ffe896; --green:#4fd27e; --shadow:0 1px 2px rgba(0,0,0,.4),0 24px 50px -24px rgba(0,0,0,.8); color-scheme:dark; }
 * { box-sizing:border-box; }
+[hidden] { display:none !important; }
 html { scroll-behavior:smooth; }
 body { margin:0; background:var(--bg); color:var(--ink); font-family:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace; font-size:14px; line-height:1.5; }
 img { max-width:100%; }
@@ -140,3 +141,18 @@ a { color:inherit; }
   .fl-row-art { width:40px; height:40px; }
   .fl-row-k { display:none; }
 }
+
+/* v1.1 additions */
+.fl-walletbal { width:100%; font-size:11px; color:var(--muted); }
+.fl-walletbal b { color:var(--ink); }
+.fl-check { display:flex; align-items:flex-start; gap:10px; font-size:12px; color:var(--muted); line-height:1.5; cursor:pointer; }
+.fl-check input { margin-top:3px; accent-color:var(--red); }
+.fl-check b { color:var(--ink); }
+.fl-check-tight { align-items:center; white-space:nowrap; }
+.fl-sechead-row { display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+.fl-share { display:grid; gap:8px; }
+.fl-share textarea { width:100%; border:1.5px solid var(--line); border-radius:12px; background:var(--well); color:var(--ink); font:inherit; font-size:12.5px; padding:10px 12px; resize:none; }
+.fl-share-row { display:flex; gap:12px; align-items:center; }
+.fl-ghost-btn { border:0; background:transparent; font:inherit; cursor:pointer; }
+.fl-row.hid { display:none; }
+.fl-grind { font-variant-numeric:tabular-nums; }

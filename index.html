@@ -53,7 +53,7 @@
           </div>
           <label class="fl-field"><span class="fl-lab">Description <i id="descCount">0/500</i></span><textarea id="fDesc" maxlength="500" rows="3" placeholder="One line people will actually read."></textarea></label>
           <div class="fl-field">
-            <span class="fl-lab">Art <i>square PNG, JPG or GIF · under 4 MB</i></span>
+            <span class="fl-lab">Art <i>PNG, JPG, GIF or WEBP · under 4 MB · auto-cropped to a square</i></span>
             <label class="fl-drop" id="dropZone"><input id="fImage" type="file" accept="image/png,image/jpeg,image/gif,image/webp" hidden><span class="fl-drop-txt" id="dropTxt">Drop the image here or click to choose</span></label>
           </div>
           <details class="fl-more"><summary>Links and launch options</summary>
@@ -63,20 +63,22 @@
               <label class="fl-field"><span class="fl-lab">Website</span><input id="fWebsite" placeholder="https://…"></label>
             </div>
             <div class="fl-row3">
-              <label class="fl-field"><span class="fl-lab">Initial buy (SOL)</span><input id="fBuy" type="text" inputmode="decimal" value="0"></label>
+              <label class="fl-field"><span class="fl-lab">Initial buy (SOL) <i id="buyQuote"></i></span><input id="fBuy" type="text" inputmode="decimal" value="0"></label>
               <label class="fl-field"><span class="fl-lab">Slippage %</span><input id="fSlip" type="text" inputmode="decimal" value="10"></label>
               <label class="fl-field"><span class="fl-lab">Priority fee (SOL)</span><input id="fPrio" type="text" inputmode="decimal" value="0.0005"></label>
             </div>
+            <label class="fl-check"><input id="fVanity" type="checkbox"><span>Grind a mint address ending in <b>pump</b> before launching. Runs in your browser, usually 2 to 8 minutes, and you can skip it at any time.</span></label>
             <p class="fl-fine">The initial buy is optional. It is your first purchase on the curve and goes through PumpPortal, which charges 0.5% of that buy. Creating the coin itself is free on pump.fun; you pay only the network fee.</p>
           </details>
           <div class="fl-launchbar">
             <button id="launchBtn" class="fl-cta fl-cta-big" type="submit" disabled>Fling it</button>
-            <div class="fl-status" id="status" aria-live="polite">Connect a wallet to launch.</div>
+            <div class="fl-status" id="status" aria-live="polite">Connect a wallet to launch.</div><div class="fl-walletbal" id="walletBal" hidden></div>
           </div>
           <ol class="fl-progress" id="progress" hidden>
             <li data-step="1">Pin art and metadata</li><li data-step="2">Build the create transaction</li><li data-step="3">Sign in your wallet</li><li data-step="4">Confirm on-chain</li>
           </ol>
           <div class="fl-result" id="result" hidden></div>
+          <div class="fl-share" id="share" hidden><p class="fl-lab">Tell people</p><textarea id="shareTxt" rows="3" readonly></textarea><div class="fl-share-row"><button type="button" id="copyShare" class="fl-ghost fl-ghost-btn">Copy post</button><a id="shareX" class="fl-ghost" href="#" target="_blank" rel="noopener">Open X</a></div></div>
         </form>
         <aside class="fl-preview" aria-label="Preview">
           <p class="fl-lab">How it will look</p>
@@ -98,7 +100,7 @@
     </section>
 
     <section id="live" class="fl-section">
-      <div class="fl-sechead"><h2 class="fl-h2">Live board</h2><p class="fl-subtle">Every coin being flung on pump.fun right now, straight from the chain feed. Newest first.</p></div>
+      <div class="fl-sechead fl-sechead-row"><div><h2 class="fl-h2">Live board</h2><p class="fl-subtle">Every coin being flung on pump.fun right now, straight from the chain feed. Newest first.</p></div><label class="fl-check fl-check-tight"><input id="liveFilter" type="checkbox"><span>only dev buys of 0.5 SOL or more</span></label></div>
       <div class="fl-live" id="liveBoard"><div class="fl-live-empty" id="liveEmpty">Connecting to the feed…</div></div>
     </section>
 
