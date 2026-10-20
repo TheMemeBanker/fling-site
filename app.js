@@ -235,7 +235,7 @@ function renderMine() {
   const l = mineLoad(); const el = $("mineList"); const sec = document.getElementById("mine");
   if (!l.length) { sec.hidden = true; el.innerHTML = ""; return; }
   sec.hidden = false;
-  el.innerHTML = l.map(x => `<a class="fl-row" href="https://pump.fun/coin/${x.mint}" target="_blank" rel="noopener"><span class="fl-row-art"><img src="./logo.png" alt="" style="image-rendering:pixelated;width:60%;height:60%;object-fit:contain"></span><span class="fl-row-name"><b>${esc(x.name)}</b><span>$${esc(x.symbol)}</span></span><span class="fl-row-k hide-m">mint<b>${x.mint.slice(0,4)}…${x.mint.slice(-4)}</b></span><span class="fl-row-k">status<b>${x.sig ? "live" : "dry run"}</b></span><span class="fl-row-t">${ago(x.at)}</span></a>`).join("");
+  el.innerHTML = l.map(x => `<a class="fl-row" href="https://pump.fun/coin/${x.mint}" target="_blank" rel="noopener"><span class="fl-row-art"><img src="./brand/fling-mark-orange.svg" alt="" style="width:55%;height:55%;object-fit:contain"></span><span class="fl-row-name"><b>${esc(x.name)}</b><span>$${esc(x.symbol)}</span></span><span class="fl-row-k hide-m">mint<b>${x.mint.slice(0,4)}…${x.mint.slice(-4)}</b></span><span class="fl-row-k">status<b>${x.sig ? "live" : "dry run"}</b></span><span class="fl-row-t">${ago(x.at)}</span></a>`).join("");
 }
 function ago(t) { const s = Math.max(1, Math.round((Date.now() - t) / 1000)); return s < 60 ? s + "s ago" : s < 3600 ? Math.round(s / 60) + "m ago" : s < 86400 ? Math.round(s / 3600) + "h ago" : Math.round(s / 86400) + "d ago"; }
 
@@ -253,7 +253,7 @@ function liveAdd(d) {
   const name = d.name || "unnamed", sym = d.symbol || "?", mc = d.marketCapSol != null ? (+d.marketCapSol).toFixed(1) + " SOL" : "—", buy = d.solAmount ? (+d.solAmount).toFixed(2) + " SOL" : "0 SOL";
   const art = d.uri ? "" : "";
   const row = document.createElement("a"); row.className = "fl-row new"; row.href = "https://pump.fun/coin/" + d.mint; row.target = "_blank"; row.rel = "noopener";
-  row.innerHTML = `<span class="fl-row-art"><img alt="" loading="lazy" src="./logo.png" style="image-rendering:pixelated;width:60%;height:60%;object-fit:contain;opacity:.7" data-uri="${esc(d.uri || "")}"></span><span class="fl-row-name"><b>${esc(name)}</b><span>$${esc(sym)}</span></span><span class="fl-row-k hide-m">dev buy<b>${buy}</b></span><span class="fl-row-k">market cap<b>${mc}</b></span><span class="fl-row-t">just now</span>`;
+  row.innerHTML = `<span class="fl-row-art"><img alt="" loading="lazy" src="./brand/fling-mark-orange.svg" style="width:55%;height:55%;object-fit:contain;opacity:.8" data-uri="${esc(d.uri || "")}"></span><span class="fl-row-name"><b>${esc(name)}</b><span>$${esc(sym)}</span></span><span class="fl-row-k hide-m">dev buy<b>${buy}</b></span><span class="fl-row-k">market cap<b>${mc}</b></span><span class="fl-row-t">just now</span>`;
   row.dataset.buy = d.solAmount || 0; if ($("liveFilter").checked && (+row.dataset.buy) < 0.5) row.classList.add("hid");
   const board = $("liveBoard"); const empty = $("liveEmpty"); if (empty) empty.remove();
   board.prepend(row); liveRows.unshift({ row, at: Date.now() });
