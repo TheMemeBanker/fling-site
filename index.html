@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>FLING — fling your memecoin</title>
-<meta name="description" content="FLING is a memecoin launchpad. Name it, pick a ticker, drop the art, and fling it onto pump.fun from your own wallet in one signature.">
+<meta name="description" content="FLING is a memecoin launchpad on Solana. No custody. No fee. One signature. Name it, drop the art, and your coin is live on pump.fun.">
 <meta property="og:title" content="FLING">
-<meta property="og:description" content="Fling your memecoin. One form, one signature, live on pump.fun.">
+<meta property="og:description" content="No custody. No fee. One signature. Fling your memecoin onto pump.fun.">
 <meta property="og:image" content="https://flingit.fun/brand/fling-og-1200x630.png">
 <meta property="og:url" content="https://flingit.fun/">
 <link rel="canonical" href="https://flingit.fun/">
@@ -17,12 +17,13 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@FlingItFun">
 <meta name="twitter:title" content="FLING">
-<meta name="twitter:description" content="Fling your memecoin. One form, one signature, live on pump.fun.">
+<meta name="twitter:description" content="No custody. No fee. One signature. Fling your memecoin onto pump.fun.">
 <meta name="twitter:image" content="https://flingit.fun/brand/fling-og-1200x630.png">
 <link rel="stylesheet" href="./fling.css">
 <script>try{var t=localStorage.getItem("fling-theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
 </head>
 <body>
+<div class="fl-bg" aria-hidden="true"><canvas id="bgfx"></canvas></div>
 <div class="fl-shell">
   <header class="fl-header">
     <button id="menuBtn" class="fl-menu" type="button" aria-label="Menu" aria-expanded="false" aria-controls="side"><svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 5h14M3 10h14M3 15h14"/></svg></button>
@@ -38,6 +39,7 @@
   <main id="top">
     <section class="fl-hero">
       <h1 class="fl-h1"><img src="./brand/fling-mark-orange.svg" alt="" class="fl-hero-mark" width="88" height="88" draggable="false"><svg class="fl-hero-wm" xmlns="http://www.w3.org/2000/svg" viewBox="0 -938 3243 978" aria-hidden="true"><g fill="currentColor"><path d="M74 -688H630V-523H295V-405H583V-247H295V0H74Z M723 -688H944V-176H1297V0H723Z M1365 0V-528H1564V0Z M2179 0 1890 -334V0H1687V-688H1880L2169 -349V-688H2372V0Z M3198 -439H2987Q2987 -482 2949.0 -508.5Q2911 -535 2857 -535Q2779 -535 2739.0 -493.5Q2699 -452 2699 -376V-312Q2699 -236 2739.0 -194.5Q2779 -153 2857 -153Q2911 -153 2949.0 -178.5Q2987 -204 2987 -244H2831V-384H3198V0H3084L3062 -68Q2968 12 2816 12Q2645 12 2559.0 -77.5Q2473 -167 2473 -344Q2473 -519 2570.5 -609.5Q2668 -700 2848 -700Q2947 -700 3026.0 -670.0Q3105 -640 3151.5 -581.5Q3198 -523 3198 -439Z"/><circle cx="1582" cy="-816" r="78"/></g></svg><span class="fl-sr">FLING</span></h1>
+      <p class="fl-slogan"><b>No custody.</b> No fee. One signature.</p>
       <p class="fl-sub">Name it, drop the art, sign once. Your coin is live on pump.fun.</p>
     </section>
 
@@ -119,6 +121,15 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.98.0/lib/index.iife.min.js"></script>
 <script src="./app.js" defer></script>
+<script>(function(){const cv=document.getElementById("bgfx");if(!cv)return;const ctx=cv.getContext("2d");const rm=window.matchMedia("(prefers-reduced-motion: reduce)").matches;let W,H,dpr,dots=[],raf=0,last=0;
+function accent(){return getComputedStyle(document.documentElement).getPropertyValue("--accent").trim()||"#FF4A1C";}
+function size(){dpr=Math.min(2,window.devicePixelRatio||1);W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);}
+function mk(seed){return {t:seed?Math.random():0,dur:28000+Math.random()*26000,x0:-0.1+Math.random()*0.5,y0:1.05+Math.random()*0.2,x1:0.6+Math.random()*0.6,y1:-0.15+Math.random()*0.25,cx:0.1+Math.random()*0.5,cy:0.1+Math.random()*0.5,r:1+Math.random()*1.8,a:0.18+Math.random()*0.3};}
+function init(){size();dots=[];const n=Math.round(Math.min(18,Math.max(8,W/110)));for(let i=0;i<n;i++)dots.push(mk(true));}
+function draw(ts){if(document.hidden){raf=0;return;}const dt=last?ts-last:16;last=ts;ctx.clearRect(0,0,W,H);const col=accent();for(const d of dots){if(!rm){d.t+=dt/d.dur;if(d.t>1){Object.assign(d,mk(false));}}const t=d.t,u=1-t;const x=(u*u*d.x0+2*u*t*d.cx+t*t*d.x1)*W,y=(u*u*d.y0+2*u*t*d.cy+t*t*d.y1)*H;const fade=Math.sin(Math.PI*Math.min(1,Math.max(0,t)));ctx.beginPath();ctx.arc(x,y,d.r,0,Math.PI*2);ctx.fillStyle=col;ctx.globalAlpha=d.a*fade;ctx.fill();ctx.globalAlpha=d.a*fade*0.35;ctx.beginPath();ctx.arc(x,y,d.r*3.2,0,Math.PI*2);ctx.fill();}ctx.globalAlpha=1;if(!rm)raf=requestAnimationFrame(draw);}
+function start(){if(!raf){last=0;raf=requestAnimationFrame(draw);}}
+init();if(rm){draw(0);}else{start();}
+window.addEventListener("resize",()=>{init();if(rm)draw(0);});document.addEventListener("visibilitychange",()=>{if(!document.hidden)start();});})();</script>
 <script>(function(){const side=document.getElementById("side"),scrim=document.getElementById("scrim"),btn=document.getElementById("menuBtn"),close=document.getElementById("sideClose");if(!side)return;const open=()=>{side.classList.add("open");scrim.hidden=false;btn&&btn.setAttribute("aria-expanded","true");document.body.style.overflow="hidden";};const shut=()=>{side.classList.remove("open");scrim.hidden=true;btn&&btn.setAttribute("aria-expanded","false");document.body.style.overflow="";};btn&&btn.addEventListener("click",()=>side.classList.contains("open")?shut():open());close&&close.addEventListener("click",shut);scrim.addEventListener("click",shut);document.addEventListener("keydown",e=>{if(e.key==="Escape")shut();});side.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>{if(window.matchMedia("(max-width: 900px)").matches)shut();}));const secs=[...document.querySelectorAll("main section[id]")];const links=[...side.querySelectorAll('a[href*="#"]')];if(secs.length&&"IntersectionObserver"in window){const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.toggle("on",l.getAttribute("href").endsWith("#"+e.target.id)));}});},{rootMargin:"-30% 0px -60% 0px"});secs.forEach(s=>io.observe(s));}})();</script>
 </body>
 </html>
