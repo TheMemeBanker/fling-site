@@ -103,7 +103,9 @@ a { color:inherit; }
 @keyframes flin { from { opacity:0; transform:translateY(-4px);} to { opacity:1; transform:none; } }
 @media (prefers-reduced-motion:reduce) { .fl-row.new { animation:none; } }
 .fl-row-art { width:44px; height:44px; border-radius:10px; background:var(--well); overflow:hidden; display:grid; place-items:center; }
-.fl-row-art img { width:100%; height:100%; object-fit:cover; }
+.fl-row-art img { width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity .25s ease; background:var(--well); }
+.fl-row-art img.ok { opacity:1; }
+.fl-row-art img[src^="data:"] { opacity:1; }
 .fl-row-name { min-width:0; }
 .fl-row-name b { display:block; font-size:12.5px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .fl-row-name span { font-size:11px; color:var(--accent); font-weight:700; }

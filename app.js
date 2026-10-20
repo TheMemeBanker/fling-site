@@ -298,11 +298,55 @@ function renderMine() {
 }
 function ago(t) { const s = Math.max(1, Math.round((Date.now() - t) / 1000)); return s < 60 ? s + "s ago" : s < 3600 ? Math.round(s / 60) + "m ago" : s < 86400 ? Math.round(s / 3600) + "h ago" : Math.round(s / 86400) + "d ago"; }
 
-/* ---------- live board (pump.fun creates, via PumpPortal feed) ---------- */
-let liveN = 0; const liveRows = [];
+/* ---------- live board: real art, resolved in real time ----------
+   Order of truth for each coin's image:
+     1. its own metadata JSON (IPFS, fetched through two gateways that send CORS, raced; CIDv0 and v1)
+     2. DexScreener's token record once it indexes the mint (also refreshes market cap in USD every 30 s)
+     3. a lettered badge in the coin's own initials (never the FLING mark)
+*/
+const GW = ["https://ipfs.filebase.io/ipfs/", "https://ipfs.4everland.io/ipfs/"];   // metadata JSON (both send CORS, both take CIDv0 + v1)
+/* image candidates, fastest first: pump.fun's resizing CDN (~27 KB), then full-size gateways */
+const IMG_GW = [c => "https://pump.mypinata.cloud/ipfs/" + c + "?img-width=128&img-dpr=2", c => "https://ipfs.filebase.io/ipfs/" + c, c => "https://ipfs.4everland.io/ipfs/" + c];
+const artCache = new Map();       // uri -> image url | null
+try { for (const [k, v] of Object.entries(JSON.parse(sessionStorage.getItem("fling-art") || "{}"))) artCache.set(k, v); } catch (e) {}
+function artRemember(k, v) { artCache.set(k, v); try { const o = JSON.parse(sessionStorage.getItem("fling-art") || "{}"); o[k] = v; const ks = Object.keys(o); if (ks.length > 300) ks.slice(0, ks.length - 300).forEach(x => delete o[x]); sessionStorage.setItem("fling-art", JSON.stringify(o)); } catch (e) {}
+}
+function cidOf(u) { const m = String(u || "").match(/(?:ipfs:\/\/|\/ipfs\/)([A-Za-z0-9]+)/); return m ? m[1] : null; }
+function imgCandidates(src) { const cid = cidOf(src); if (cid) return IMG_GW.map(g => g(cid)); if (!src) return []; return [String(src).replace(/^http:\/\//i, "https://")]; }   // never mixed content
+function withTimeout(p, ms) { return Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(new Error("timeout")), ms))]); }
+async function fetchJsonRaced(urls, ms = 7000) {
+  const tries = urls.map(u => withTimeout(fetch(u, { mode: "cors", cache: "force-cache" }).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }), ms));
+  return Promise.any(tries);
+}
+async function metadataImage(uri) {
+  if (artCache.has(uri)) return artCache.get(uri);
+  const cid = cidOf(uri);
+  let json = null;
+  const blocked = /j7tracker\.io|uguu\.se|qpqpqpqpqp\.com/i.test(uri || "");   // hosts that refuse browser reads; DexScreener fills these in later
+  try { json = cid ? await fetchJsonRaced(GW.map(g => g + cid)) : (blocked ? null : await withTimeout(fetch(uri, { mode: "cors" }).then(r => r.json()), 6000)); } catch (e) {}
+  const img = json && (json.image || (json.properties && json.properties.image)) || null;
+  artRemember(uri, img); return img;
+}
+function setArt(img, candidates, onFail) {
+  const list = candidates.filter(Boolean); if (!list.length) { onFail && onFail(); return; }
+  let i = 0; const next = () => { if (i >= list.length) { onFail && onFail(); return; } img.onerror = next; img.src = list[i++]; };
+  img.onload = () => { img.classList.add("ok"); img.onerror = null; };
+  next();
+}
+function badge(sym) {
+  const t = String(sym || "?").replace(/[^A-Za-z0-9]/g, "").slice(0, 3).toUpperCase() || "?";
+  const hue = [...t].reduce((h, c) => (h * 31 + c.charCodeAt(0)) % 360, 17);
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="hsl(${hue} 55% 22%)"/><text x="32" y="40" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="${t.length > 2 ? 20 : 24}" font-weight="800" fill="hsl(${hue} 80% 78%)">${t}</text></svg>`;
+  return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+}
+const pool = { active: 0, max: 4, q: [] };
+function enqueue(fn) { pool.q.push(fn); pump(); }
+async function pump() { while (pool.active < pool.max && pool.q.length) { const fn = pool.q.shift(); pool.active++; fn().catch(() => {}).finally(() => { pool.active--; pump(); }); } }
+
+let liveN = 0; const liveRows = []; const rowByMint = new Map();
 function liveConnect() {
   let ws; try { ws = new WebSocket(CONFIG.feedWs); } catch (e) { return; }
-  ws.onopen = () => { ws.send(JSON.stringify({ method: "subscribeNewToken" })); $("liveEmpty").textContent = "Watching the feed — new coins appear as they land."; };
+  ws.onopen = () => { ws.send(JSON.stringify({ method: "subscribeNewToken" })); const le = $("liveEmpty"); if (le) le.textContent = "Watching the feed — new coins appear as they land."; };
   ws.onmessage = (e) => { let d; try { d = JSON.parse(e.data); } catch (x) { return; } if (!d.mint || d.txType !== "create") return; liveAdd(d); };
   ws.onclose = () => setTimeout(liveConnect, 4000);
   ws.onerror = () => { try { ws.close(); } catch (e) {} };
@@ -310,29 +354,36 @@ function liveConnect() {
 function liveAdd(d) {
   liveN++; $("liveCount").textContent = liveN.toLocaleString("en-US");
   const name = d.name || "unnamed", sym = d.symbol || "?", mc = d.marketCapSol != null ? (+d.marketCapSol).toFixed(1) + " SOL" : "—", buy = d.solAmount ? (+d.solAmount).toFixed(2) + " SOL" : "0 SOL";
-  const art = d.uri ? "" : "";
-  const row = document.createElement("a"); row.className = "fl-row new"; row.href = "https://pump.fun/coin/" + d.mint; row.target = "_blank"; row.rel = "noopener";
-  row.innerHTML = `<span class="fl-row-art"><img alt="" loading="lazy" src="./brand/fling-mark-orange.svg" style="width:55%;height:55%;object-fit:contain;opacity:.8" data-uri="${esc(d.uri || "")}"></span><span class="fl-row-name"><b>${esc(name)}</b><span>$${esc(sym)}</span></span><span class="fl-row-k hide-m">dev buy<b>${buy}</b></span><span class="fl-row-k">market cap<b>${mc}</b></span><span class="fl-row-t">just now</span>`;
+  const row = document.createElement("a"); row.className = "fl-row new"; row.href = "https://pump.fun/coin/" + d.mint; row.target = "_blank"; row.rel = "noopener"; row.dataset.mint = d.mint;
+  row.innerHTML = `<span class="fl-row-art"><img alt="" loading="lazy" decoding="async"></span><span class="fl-row-name"><b>${esc(name)}</b><span>$${esc(sym)}</span></span><span class="fl-row-k hide-m">dev buy<b>${buy}</b></span><span class="fl-row-k">market cap<b class="mc">${mc}</b></span><span class="fl-row-t">just now</span>`;
   row.dataset.buy = d.solAmount || 0; if ($("liveFilter").checked && (+row.dataset.buy) < 0.5) row.classList.add("hid");
   const board = $("liveBoard"); const empty = $("liveEmpty"); if (empty) empty.remove();
-  board.prepend(row); liveRows.unshift({ row, at: Date.now() });
-  while (liveRows.length > 40) liveRows.pop().row.remove();
-  resolveArt(row.querySelector("img"));
+  board.prepend(row); liveRows.unshift({ row, at: Date.now(), mint: d.mint, uri: d.uri || "", sym, resolved: false, tries: 0 });
+  rowByMint.set(d.mint, liveRows[0]);
+  while (liveRows.length > 40) { const x = liveRows.pop(); rowByMint.delete(x.mint); x.row.remove(); }
+  const img = row.querySelector("img"); img.src = badge(sym);
+  enqueue(async () => {
+    const src = await metadataImage(liveRows.find(x => x.mint === d.mint)?.uri);
+    const entry = rowByMint.get(d.mint); if (!entry) return;
+    if (src) { setArt(img, imgCandidates(src), () => { entry.resolved = false; }); entry.resolved = true; }
+  });
 }
-/* art lookups go through a slow queue (one every 1.6 s) so the public gateway does not rate-limit us */
-const artQ = []; let artBusy = false;
-function resolveArt(img) { artQ.push(img); if (artQ.length > 12) artQ.shift(); if (!artBusy) artPump(); }
-async function artPump() { artBusy = true; while (artQ.length) { const img = artQ.shift(); if (!img.isConnected) continue; await resolveArtNow(img); await new Promise(r => setTimeout(r, 1600)); } artBusy = false; }
-async function resolveArtNow(img) {
-  const uri = img.dataset.uri; if (!uri) return;
-  const m = uri.match(/(?:ipfs:\/\/|\/ipfs\/)([A-Za-z0-9]+)/); if (!m) return;   // non-IPFS hosts block browser reads; keep the placeholder
+/* DexScreener: image for anything the gateways could not give us, and live USD market cap for the visible rows */
+async function dexRefresh() {
+  const rows = liveRows.filter(x => x.row.isConnected).slice(0, 30); if (!rows.length) return;
   try {
-    const u = CONFIG.fetchGateway + m[1];
-    const r = await fetch(u, { cache: "force-cache" }); const j = await r.json(); let src = j.image || "";
-    const im = src.match(/(?:ipfs:\/\/|\/ipfs\/)([A-Za-z0-9]+)/); if (im) src = CONFIG.gateway + im[1];
-    if (src) { img.src = src; img.style.cssText = ""; }
+    const r = await fetch("https://api.dexscreener.com/tokens/v1/solana/" + rows.map(x => x.mint).join(","), { cache: "no-store" });
+    if (!r.ok) return; const list = await r.json(); if (!Array.isArray(list)) return;
+    const byMint = new Map(); list.forEach(p => { const m = p.baseToken && p.baseToken.address; if (m && !byMint.has(m)) byMint.set(m, p); });
+    rows.forEach(x => {
+      const p = byMint.get(x.mint); if (!p) return;
+      const mcEl = x.row.querySelector(".mc"); if (mcEl && p.marketCap != null) mcEl.textContent = "$" + Math.round(p.marketCap).toLocaleString("en-US");
+      const img = x.row.querySelector("img"); const iu = p.info && p.info.imageUrl;
+      if (!x.resolved && iu) { setArt(img, [iu]); x.resolved = true; }
+    });
   } catch (e) {}
 }
+setInterval(dexRefresh, 30000); setTimeout(dexRefresh, 8000);
 setInterval(() => { liveRows.forEach(x => { const t = x.row.querySelector(".fl-row-t"); if (t) t.textContent = ago(x.at); }); }, 15000);
 
 $("liveFilter").addEventListener("change", () => { const on = $("liveFilter").checked; liveRows.forEach(x => x.row.classList.toggle("hid", on && (+x.row.dataset.buy) < 0.5)); });
