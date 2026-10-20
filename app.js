@@ -5,6 +5,8 @@ const CONFIG = {
   rpcs: ["https://solana-rpc.publicnode.com", "https://solana.drpc.org", "https://api.mainnet-beta.solana.com"],
   tradeLocal: "https://pumpportal.fun/api/trade-local",
   feedWs: "wss://pumpportal.fun/api/data",
+  irysGateway: "https://gateway.irys.xyz/",                 // permanent storage (Arweave via Irys); uploads under 100 KiB are free, signed by the launcher's wallet
+  irysBundle: "./vendor/irys.bundle.js",
   gateway: "https://ipfs.io/ipfs/",
   fetchGateway: "https://gateway.pinata.cloud/ipfs/",     // gateway that sends CORS headers, used for reading metadata JSON in the browser
   pool: "pump",
@@ -161,6 +163,52 @@ function grindVanity(suffix, onProgress) {
     grindVanity.cancel = () => finish(null);
   });
 }
+/* ---------- permanent storage via Irys (default route, no keys) ---------- */
+let irysLoading = null;
+function loadIrys() {
+  if (window.IrysWeb) return Promise.resolve();
+  if (!irysLoading) irysLoading = new Promise((res, rej) => { const s = document.createElement("script"); s.src = CONFIG.irysBundle; s.onload = res; s.onerror = () => rej(new Error("Could not load the storage client")); document.head.appendChild(s); });
+  return irysLoading;
+}
+function walletForIrys() {
+  return {
+    publicKey: pubkey,
+    signMessage: async (m) => { const r = await wallet.signMessage(m); return r && r.signature ? r.signature : r; },
+    sendTransaction: async (tx, conn, opts) => { if (wallet.signAndSendTransaction) { const r = await wallet.signAndSendTransaction(tx, opts); return r.signature || r; } const s = await wallet.signTransaction(tx); return await conn.sendRawTransaction(s.serialize(), opts); },
+  };
+}
+/* shrink stills under the free tier (100 KiB): resize then step the JPEG quality down; keep PNG when it already fits */
+async function shrinkForUpload(file, limit = 95 * 1024) {
+  if (file.size <= limit || file.type === "image/gif") return file;
+  const bmp = await createImageBitmap(file);
+  let s = Math.min(bmp.width, bmp.height, 512);
+  for (let round = 0; round < 6; round++) {
+    const cv = document.createElement("canvas"); cv.width = s; cv.height = s;
+    const src = Math.min(bmp.width, bmp.height); cv.getContext("2d").drawImage(bmp, (bmp.width - src) / 2, (bmp.height - src) / 2, src, src, 0, 0, s, s);
+    for (const q of [0.92, 0.85, 0.78, 0.7, 0.6]) {
+      const blob = await new Promise(r => cv.toBlob(r, "image/jpeg", q));
+      if (blob.size <= limit) return new File([blob], file.name.replace(/\.[^.]+$/, "") + ".jpg", { type: "image/jpeg" });
+    }
+    s = Math.round(s * 0.8);
+  }
+  throw new Error("Could not get the image under 100 KB. Try a simpler image.");
+}
+async function pinViaIrys(meta, file, onStatus) {
+  onStatus("Loading storage client…"); await loadIrys();
+  const { WebUploader, WebSolana } = window.IrysWeb;
+  const irys = await WebUploader(WebSolana).withProvider(walletForIrys()).withRpc(CONFIG.rpcs[0]).mainnet();
+  onStatus("Preparing the art…"); const img = await shrinkForUpload(file);
+  const bytes = img.size + 600;
+  if (bytes > 100 * 1024) { const price = await irys.getPrice(bytes); const bal = await irys.getBalance(); if (bal.lt(price)) { onStatus("Funding storage (tiny SOL amount, approve in wallet)…"); await irys.fund(price.multipliedBy(1.2).integerValue()); } }
+  onStatus("Sign the storage message in your wallet…");
+  const up = await irys.uploadFile(img, { tags: [{ name: "Content-Type", value: img.type }, { name: "App-Name", value: "FLING" }] });
+  const imageUrl = CONFIG.irysGateway + up.id;
+  const json = { name: meta.name, symbol: meta.symbol, description: meta.description, image: imageUrl, showName: true, createdOn: "https://pump.fun" };
+  if (meta.twitter) json.twitter = meta.twitter; if (meta.telegram) json.telegram = meta.telegram; if (meta.website) json.website = meta.website;
+  onStatus("Storing metadata…");
+  const up2 = await irys.upload(JSON.stringify(json), { tags: [{ name: "Content-Type", value: "application/json" }, { name: "App-Name", value: "FLING" }] });
+  return { uri: CONFIG.irysGateway + up2.id, image: imageUrl };
+}
 /* ---------- launch ---------- */
 async function rpcSend(raw) {
   let last;
@@ -177,13 +225,14 @@ $("launchForm").addEventListener("submit", async (e) => {
   const meta = { name: f.name.value.trim().slice(0, 32), symbol: f.sym.value.trim().toUpperCase().slice(0, 10), description: f.desc.value.trim().slice(0, 500), twitter: f.tw.value.trim(), telegram: f.tg.value.trim(), website: f.web.value.trim() };
   const buy = num(f.buy.value), slip = num(f.slip.value) || 10, prio = num(f.prio.value) || 0.0005;
   try {
-    step(1); setStatus("Pinning art and metadata…");
+    step(1); setStatus("Storing art and metadata…");
     const jwt = $("pinataJwt").value.trim();
     let uri;
     if (CONFIG.uploadProxy) uri = await pinViaProxy(meta, imageFile);
     else if (jwt) uri = await pinViaPinata(meta, imageFile, jwt);
+    else if (wallet.signMessage) uri = (await pinViaIrys(meta, imageFile, setStatus)).uri;
     else if (DRY) uri = "https://example.invalid/dry-run.json";
-    else throw new Error("No pinning route. Open Options and paste a free Pinata key (pinata.cloud).");
+    else throw new Error("This wallet cannot sign messages. Open Options and paste a free Pinata key instead.");
     step(2);
     let mint = null;
     if ($("fVanity").checked && !DRY) {
@@ -201,7 +250,7 @@ $("launchForm").addEventListener("submit", async (e) => {
     tx.sign([mint]);
     step(3); setStatus("Approve the transaction in your wallet…");
     const signed = await wallet.signTransaction(tx);
-    if (DRY) { step(4, "done"); setStatus("Dry run complete: pinned, built and signed, not broadcast.", "ok"); showResult(mint.publicKey.toBase58(), null, meta); launching = false; validate(true); return; }
+    if (DRY) { step(4, "done"); setStatus("Dry run complete: stored, built and signed, not broadcast.", "ok"); showResult(mint.publicKey.toBase58(), null, meta); $("result").innerHTML += `<br>metadata <a href="${uri}" target="_blank" rel="noopener">${uri}</a>`; launching = false; validate(true); return; }
     step(4); setStatus("Sending…");
     const { c, sig } = await rpcSend(signed.serialize());
     setStatus("Confirming " + sig.slice(0, 8) + "…");

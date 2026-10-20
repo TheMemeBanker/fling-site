@@ -57,7 +57,7 @@
             <label class="fl-field"><span class="fl-lab">Website</span><input id="fWebsite" placeholder="https://…"></label>
           </div>
           <label class="fl-check"><input id="fVanity" type="checkbox"><span>Mint address ending in <b>pump</b>. Grinds in your browser, a few minutes, skippable.</span></label>
-          <div id="setup"><label class="fl-field"><span class="fl-lab">Pinata key <i>stays in this browser</i></span><input id="pinataJwt" type="password" placeholder="eyJ…"></label><p class="fl-fine" id="setupTxt">Art is pinned to IPFS before launch. Paste a free Pinata key here, or use the pad's relay when it is configured.</p></div>
+          <div id="setup"><label class="fl-field"><span class="fl-lab">Pinata key <i>stays in this browser</i></span><input id="pinataJwt" type="password" placeholder="eyJ…"></label><p class="fl-fine" id="setupTxt">By default your art and metadata are stored permanently on Arweave through Irys: you sign one message in your wallet, and files under 100 KB are free. Paste a Pinata key here only if you prefer IPFS pinning.</p></div>
           <p class="fl-fine">Creating the coin is free on pump.fun. An initial buy pays 0.5% to PumpPortal. Network fee applies.</p>
         </details>
 
@@ -67,7 +67,7 @@
           <div class="fl-walletbal" id="walletBal" hidden></div>
         </div>
         <ol class="fl-progress" id="progress" hidden>
-          <li data-step="1">Pin</li><li data-step="2">Build</li><li data-step="3">Sign</li><li data-step="4">Confirm</li>
+          <li data-step="1">Store</li><li data-step="2">Build</li><li data-step="3">Sign</li><li data-step="4">Confirm</li>
         </ol>
         <div class="fl-result" id="result" hidden></div>
         <div class="fl-share" id="share" hidden><textarea id="shareTxt" rows="3" readonly></textarea><div class="fl-share-row"><button type="button" id="copyShare" class="fl-ghost fl-ghost-btn">Copy post</button><a id="shareX" class="fl-ghost" href="#" target="_blank" rel="noopener">Open X</a></div></div>
