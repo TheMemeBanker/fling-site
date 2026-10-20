@@ -309,7 +309,11 @@ function liveAdd(d) {
   while (liveRows.length > 40) liveRows.pop().row.remove();
   resolveArt(row.querySelector("img"));
 }
-async function resolveArt(img) {
+/* art lookups go through a slow queue (one every 1.6 s) so the public gateway does not rate-limit us */
+const artQ = []; let artBusy = false;
+function resolveArt(img) { artQ.push(img); if (artQ.length > 12) artQ.shift(); if (!artBusy) artPump(); }
+async function artPump() { artBusy = true; while (artQ.length) { const img = artQ.shift(); if (!img.isConnected) continue; await resolveArtNow(img); await new Promise(r => setTimeout(r, 1600)); } artBusy = false; }
+async function resolveArtNow(img) {
   const uri = img.dataset.uri; if (!uri) return;
   const m = uri.match(/(?:ipfs:\/\/|\/ipfs\/)([A-Za-z0-9]+)/); if (!m) return;   // non-IPFS hosts block browser reads; keep the placeholder
   try {
