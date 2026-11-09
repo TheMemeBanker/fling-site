@@ -12,7 +12,7 @@ const CONFIG = {
   pool: "pump",
 };
 const $ = (id) => document.getElementById(id);
-/* $FlingIt token — set ONLY after the mint is verified on-chain. null = placeholder state. */
+/* $Fling token — set ONLY after the mint is verified on-chain. null = placeholder state. */
 const FLING_MINT = "Fy9wvBrXNu9XkVBSADyka7APTDSnqXYQc9aJkMkmpump";
 function wireFlingToken() {
   const pill = $("flingTokenLink"), buy = $("flingBuy"), mintEl = $("flingMint"), note = $("flingTokenNote");
@@ -20,7 +20,7 @@ function wireFlingToken() {
   const pf = "https://pump.fun/coin/" + FLING_MINT;
   [pill, buy].forEach(el => { if (!el) return; el.href = pf; el.removeAttribute("aria-disabled"); el.removeAttribute("title"); el.target = "_blank"; el.rel = "noopener"; });
   if (mintEl) mintEl.innerHTML = '<a href="https://solscan.io/token/' + FLING_MINT + '" target="_blank" rel="noopener">' + FLING_MINT + '</a>';
-  if (note) note.textContent = "The official $FlingIt contract. Verify the address matches before you trade; anything else is an impostor.";
+  if (note) note.textContent = "The official $Fling contract. Verify the address matches before you trade; anything else is an impostor.";
 }
 const W3 = window.solanaWeb3;
 const DRY = new URLSearchParams(location.search).get("dry") === "1";   // dry run: stop before broadcasting
@@ -294,7 +294,7 @@ function renderMine() {
   const l = mineLoad(); const el = $("mineList"); const sec = document.getElementById("mine");
   if (!l.length) { sec.hidden = true; el.innerHTML = ""; return; }
   sec.hidden = false;
-  el.innerHTML = l.map(x => `<a class="fl-row" href="https://pump.fun/coin/${x.mint}" target="_blank" rel="noopener"><span class="fl-row-art"><img src="./brand/fling-mark-orange.svg" alt="" style="width:55%;height:55%;object-fit:contain"></span><span class="fl-row-name"><b>${esc(x.name)}</b><span>$${esc(x.symbol)}</span></span><span class="fl-row-k hide-m">mint<b>${x.mint.slice(0,4)}…${x.mint.slice(-4)}</b></span><span class="fl-row-k">status<b>${x.sig ? "live" : "dry run"}</b></span><span class="fl-row-t">${ago(x.at)}</span></a>`).join("");
+  el.innerHTML = l.map(x => `<a class="fl-row" href="https://pump.fun/coin/${x.mint}" target="_blank" rel="noopener"><span class="fl-row-art"><img src="./brand/fling-mark-blue.svg" alt="" style="width:55%;height:55%;object-fit:contain"></span><span class="fl-row-name"><b>${esc(x.name)}</b><span>$${esc(x.symbol)}</span></span><span class="fl-row-k hide-m">mint<b>${x.mint.slice(0,4)}…${x.mint.slice(-4)}</b></span><span class="fl-row-k">status<b>${x.sig ? "live" : "dry run"}</b></span><span class="fl-row-t">${ago(x.at)}</span></a>`).join("");
 }
 function ago(t) { const s = Math.max(1, Math.round((Date.now() - t) / 1000)); return s < 60 ? s + "s ago" : s < 3600 ? Math.round(s / 60) + "m ago" : s < 86400 ? Math.round(s / 3600) + "h ago" : Math.round(s / 86400) + "d ago"; }
 

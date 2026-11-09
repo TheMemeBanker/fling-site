@@ -1,6 +1,6 @@
-/* FLING — minimalist cut (v1.2). One column of attention: the mark, one line, the form. */
-:root { --bg:#f6f1e7; --bg2:#fbf8f1; --ink:#1b1613; --muted:#6d625a; --line:#e3d9c8; --well:#efe8da; --accent:#FF4A1C; --accent-hi:#ff6a40; --green:#1f9a5d; --shadow:0 1px 2px rgba(30,18,10,.05),0 20px 44px -26px rgba(30,18,10,.35); color-scheme:light; }
-[data-theme="dark"] { --bg:#120f0d; --bg2:#1a1512; --ink:#f3ebdd; --muted:#9d9185; --line:#2b241f; --well:#1f1915; --accent:#FF5A2E; --accent-hi:#ff7a55; --green:#4fd27e; --shadow:0 1px 2px rgba(0,0,0,.4),0 24px 50px -26px rgba(0,0,0,.8); color-scheme:dark; }
+/* FLING — blue cut (v1.3). One column of attention: the mark, one line, the form. Identity v3: the skip. */
+:root { --bg:#f2f5fb; --bg2:#fafbfe; --ink:#0e1526; --muted:#5f6d87; --line:#d8e0ee; --well:#e9eef7; --accent:#1D5FFF; --accent-hi:#3b74ff; --green:#1f9a5d; --shadow:0 1px 2px rgba(10,20,50,.05),0 20px 44px -26px rgba(10,20,50,.35); color-scheme:light; }
+[data-theme="dark"] { --bg:#0a0e17; --bg2:#111827; --ink:#eef2fa; --muted:#8b96ad; --line:#1f2940; --well:#151d2e; --accent:#3B82FF; --accent-hi:#5c97ff; --green:#4fd27e; --shadow:0 1px 2px rgba(0,0,0,.45),0 24px 50px -26px rgba(0,0,0,.85); color-scheme:dark; }
 * { box-sizing:border-box; }
 [hidden] { display:none !important; }
 html { scroll-behavior:smooth; }
@@ -129,6 +129,9 @@ a { color:inherit; }
 }
 @media (max-width: 520px) {
   .fl-shell { padding:0 16px 40px; }
+  .fl-header { gap:8px; }
+  .fl-header-right { gap:4px; }
+  .fl-header .fl-brand-wm, .fl-header .fl-x { display:none; }
   .fl-form { padding:18px 16px; border-radius:18px; }
   .fl-row2, .fl-row3 { grid-template-columns:1fr; }
   .fl-progress { grid-template-columns:1fr 1fr; }
@@ -177,7 +180,7 @@ a { color:inherit; }
   .fl-shell { padding-bottom:calc(40px + env(safe-area-inset-bottom,0px)); overflow-x:clip; }
 }
 
-/* $FlingIt token */
+/* $Fling token */
 .fl-pill { border:1.5px solid var(--accent); color:var(--accent); border-radius:999px; font-size:12px; font-weight:800; padding:6px 12px; text-decoration:none; white-space:nowrap; }
 .fl-pill[aria-disabled="true"] { opacity:.55; }
 .fl-token-head { display:flex; align-items:flex-start; gap:14px; }

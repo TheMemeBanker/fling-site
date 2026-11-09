@@ -3,6 +3,7 @@
 A static memecoin launchpad for pump.fun. One form, one wallet signature, no custody.
 
 - `index.html` / `fling.css` / `app.js` — the whole site. Hosted on GitHub Pages.
+- `brand/` — identity v3 "the skip" (a stone flung off a wave), Fling Blue `#1D5FFF` (`#3B82FF` on the dark ground). All marks are single-colour vectors; `fling-token.svg` is the $Fling token art slot.
 - Launch flow: pin art + metadata to IPFS → PumpPortal local API builds the pump.fun create transaction → the user signs in Phantom/Solflare/Backpack → sent to Solana.
 - Live board: PumpPortal's public websocket feed of new pump.fun coins.
 
