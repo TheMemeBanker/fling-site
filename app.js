@@ -13,7 +13,7 @@ const CONFIG = {
 };
 const $ = (id) => document.getElementById(id);
 /* $Fling token — set ONLY after the mint is verified on-chain. null = placeholder state. */
-const FLING_MINT = null; // unlinked 2026-11-09 at operator request; set again only after the new $Fling mint is verified on-chain
+const FLING_MINT = "HbAs1tLfktwaxCs9pYwEr3i1kgMKFahMFKFXatThpump"; // verified on-chain 2026-11-09: Token-2022, name FlingIt.Fun, symbol Fling, 6 dec, authorities revoked, pump.fun pair live
 function wireFlingToken() {
   const pill = $("flingTokenLink"), buy = $("flingBuy"), mintEl = $("flingMint"), note = $("flingTokenNote");
   if (!FLING_MINT) return;
