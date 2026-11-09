@@ -17,7 +17,6 @@ a { color:inherit; }
 .fl-foot-row { display:flex; align-items:center; gap:4px 10px; margin-bottom:10px; flex-wrap:wrap; }
 .fl-brand-word { font-weight:800; letter-spacing:.14em; font-size:13px; }
 .fl-header-right { display:flex; align-items:center; gap:8px; }
-.fl-x { text-decoration:none; }
 .fl-docs { font-size:12.5px; margin-right:4px; }
 .fl-iconbtn { display:grid; place-items:center; height:30px; width:30px; border:0; border-radius:8px; background:transparent; color:var(--muted); cursor:pointer; }
 .fl-iconbtn:hover { color:var(--ink); background:var(--well); }
@@ -131,7 +130,7 @@ a { color:inherit; }
   .fl-shell { padding:0 16px 40px; }
   .fl-header { gap:8px; }
   .fl-header-right { gap:4px; }
-  .fl-header .fl-brand-wm, .fl-header .fl-x { display:none; }
+  .fl-header .fl-brand-wm { display:none; }
   .fl-form { padding:18px 16px; border-radius:18px; }
   .fl-row2, .fl-row3 { grid-template-columns:1fr; }
   .fl-progress { grid-template-columns:1fr 1fr; }

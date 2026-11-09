@@ -13,7 +13,7 @@ const CONFIG = {
 };
 const $ = (id) => document.getElementById(id);
 /* $Fling token — set ONLY after the mint is verified on-chain. null = placeholder state. */
-const FLING_MINT = "Fy9wvBrXNu9XkVBSADyka7APTDSnqXYQc9aJkMkmpump";
+const FLING_MINT = null; // unlinked 2026-11-09 at operator request; set again only after the new $Fling mint is verified on-chain
 function wireFlingToken() {
   const pill = $("flingTokenLink"), buy = $("flingBuy"), mintEl = $("flingMint"), note = $("flingTokenNote");
   if (!FLING_MINT) return;
@@ -281,7 +281,7 @@ function showResult(mint, sig, meta) {
     (sig ? ` · <a href="https://solscan.io/tx/${sig}" target="_blank" rel="noopener">Transaction</a>` : " · dry run, nothing sent");
 }
 function shareFor(mint, meta) {
-  const txt = `$${meta.symbol} is live. ${meta.name} — flung onto pump.fun via @FlingItFun.\nhttps://pump.fun/coin/${mint}`;
+  const txt = `$${meta.symbol} is live. ${meta.name} — flung onto pump.fun with FLING.\nhttps://pump.fun/coin/${mint}`;
   $("share").hidden = false; $("shareTxt").value = txt; $("shareX").href = "https://x.com/intent/post?text=" + encodeURIComponent(txt);
 }
 $("copyShare").addEventListener("click", async () => { try { await navigator.clipboard.writeText($("shareTxt").value); $("copyShare").textContent = "Copied"; setTimeout(() => $("copyShare").textContent = "Copy post", 1500); } catch (e) { $("shareTxt").select(); } });
